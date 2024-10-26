@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Book Club List</h1>
+    <div>
+        <table border="3" class=="book_table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Description</th>
+                    <th>Is Read</th>
+                    <th>Update Read Status</th>
+                    <th>Current Book</th>
+                    <th>Update to Current Book</th>
+                    <th>Reviews</th>
+                    <th>Submit Review</th>
+                    <th>Delete Book</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book[0] }}</td>
+                    <td class="title_wrap">{{ book[1] }}</td>
+                    <td class="author_wrap">{{ book[2] }}</td>
+                    <td class="genre_wrap">{{ book[3] }}</td>
+                    <td class="desc_wrap">{{ book[4] }}</td>
+                    <td class="text_center">{{ book[5] }}</td>
+                    <td class="text_center">
+                        <a href="{{ url_for('update_read_status', book_id=book[0]) }}">
+                            Update Status
+                        </a>
+                    </td>
+                    <td class="text_center">{{ book[6] }}</td>
+                    <td class="text_center">
+                        {% if book[6] == 'N' %}
+                            <a href="{{ url_for('update_current_book', book_id=book[0]) }}">
+                                Update to Current
+                            </a>
+                        {% else %}
+                            Current Book
+                        {% endif %}
+                    </td>
+                    <td class="text_center">
+                        {% if review_counts[book[0]] > 0 %}
+                            <a href="{{ url_for('get_reviews', book_id=book[0]) }}">
+                                {{ review_counts[book[0]] }}
+                            </a>
+                        {% else %}
+                            {{ review_counts[book[0]] }}
+                        {% endif %}
+                    </td>
+                    <td class="text_center">
+                        <a href="{{ url_for('review_form', book_id=book[0]) }}">
+                            Add a Review
+                        </a>
+                    </td>
+                    <td class="text_center">
+                        <a href="{{ url_for('delete_one_book', book_id=book[0]) }}"
+                        onclick="return confirm('Are you sure you want to delete this book?');">
+                            Delete Book
+                        </a>
+                    </td>                     
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <a href="{{ url_for('book_form') }}">
+            <button type="button" class="add_book_button">Add a Book</button>
+        </a>
+    </div>
+    <div>
+        {% if books | length > 0 %}
+            <a href="{{ url_for('delete_all_books') }}"
+            onclick="return confirm('Are you sure you want to delete all the books in your book club?');">
+                <button type="button" class="delete_books_button">Delete All Books</button>
+            </a>
+        {% else %}
+            <a href="{{ url_for('delete_all_books') }}"
+            onclick="return confirm('Are you sure you want to delete all the books in your book club?');">
+                <button type="button" class="delete_books_button_disabled" disabled>Delete All Books</button>
+            </a>
+        {% endif %}
+    </div>
+</body>
+</html>
