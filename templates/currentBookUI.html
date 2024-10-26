@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Book Club List - Current Book</h1>
+    <div>
+        <table border="3" class=="book_table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Description</th>
+                    <th>Is Read</th>
+                    <th>Current Book</th>
+                    <th>Reviews</th>
+                    <th>Submit Review</th>
+                    <th>Delete Book</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book[0] }}</td>
+                    <td>{{ book[1] }}</td>
+                    <td>{{ book[2] }}</td>
+                    <td>{{ book[3] }}</td>
+                    <td>{{ book[4] }}</td>
+                    <td>{{ book[5] }}</td>
+                    <td>{{ book[6] }}</td>
+                    <td>
+                        {% if review_counts[book[0]] > 0 %}
+                            <a href="{{ url_for('get_reviews', book_id=book[0]) }}">
+                                {{ review_counts[book[0]] }}
+                            </a>
+                        {% else %}
+                            {{ review_counts[book[0]] }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('review_form', book_id=book[0]) }}">
+                            Add a Review
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('delete_one_book', book_id=book[0]) }}"
+                        onclick="return confirm('Are you sure you want to delete this book?');">
+                            Delete Book
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
