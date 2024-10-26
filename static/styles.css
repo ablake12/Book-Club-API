@@ -1,0 +1,76 @@
+.add_book_button {
+    background-color: rgb(91, 134, 255);
+    color: black;
+    border: rgb(91, 134, 255);
+    border-radius: 5px;
+    width: 70.35%;
+    padding: 10px 25px;
+    font-size: 14px;
+    margin-top: 5px;
+
+}
+.delete_books_button {
+    background-color: rgb(163, 187, 255);
+    color: black;
+    border: rgb(163, 187, 255);
+    border-radius: 5px;
+    width: 70.35%;
+    padding: 10px 25px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+.delete_books_button_disabled {
+    background-color: rgb(163, 187, 255);
+    color: black;
+    border: rgb(163, 187, 255);
+    border-radius: 5px;
+    width: 70.35%;
+    padding: 10px 25px;
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.submit_button {
+    background-color: rgb(91, 134, 255);
+    color: black;
+    border: rgb(91, 134, 255);
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin-top: 5px;
+    width: 10.35%;
+}
+.book_table {
+    width: 100%;
+}
+
+.review_wrap {
+    word-wrap: break-word;
+    max-width: 300px;
+}
+.desc_wrap {
+    word-wrap: break-word;
+    max-width: 250px;
+}
+.title_wrap {
+    word-wrap: break-word;
+    max-width: 150px;
+}
+.author_wrap {
+    word-wrap: break-word;
+    max-width: 125px;
+}
+.genre_wrap {
+    word-wrap: break-word;
+    max-width: 100px;
+}
+
+.text_center {
+    text-align: center;
+}
+/* .empty_current {
+    background-color: rgb(91, 134, 255);
+    width: 100%;
+    height: 100%;
+} */
