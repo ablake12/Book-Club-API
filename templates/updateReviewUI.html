@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Update review {{ review_id }} for {{ book_info[0] }} by {{ book_info[1] }}</h1>
+    <div>
+        <form action="{{ url_for('update_review', book_id=book_id, review_id=review_id) }}" method="POST">
+            
+            <label for="review">Review:</label><br>
+            <input type="text" id="review" name="review" required><br><br>
+    
+            <button type="submit" class="submit_button">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
