@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Book</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Add a New Book</h1>
+    <div>
+    <form action="/add_book" method="POST">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="author">Author:</label><br>
+        <input type="text" id="author" name="author" required><br><br>
+
+        <label for="genre">Genre:</label><br>
+        <input type="text" id="genre" name="genre" required><br><br>
+
+        <label for="description">Description:</label><br>
+        <input type="text" id="description" name="description" required><br><br>
+
+        <label for="read_status">Has this book been read? :</label><br>
+        <input type="radio" id="read_yes" name="read_status" value="Y">
+        <label for="read_yes">Yes</label><br>
+        <input type="radio" id="read_no" name="read_status" value="N">
+        <label for="read_no">No</label><br><br>
+
+        <label for="current_status">Is this the current book?:</label><br>
+        <input type="radio" id="curr_yes" name="current_status" value="Y">
+        <label for="curr_yes">Yes</label><br>
+        <input type="radio" id="curr_no" name="current_status" value="N">
+        <label for="curr_no">No</label><br>
+        
+
+        <button type="submit" class="submit_button">Submit</button>
+    </form>
+    </div>
+</body>
+</html>
