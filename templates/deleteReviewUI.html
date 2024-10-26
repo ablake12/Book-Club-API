@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Delete a Review for {{ book_info[0] }} by {{ book_info[1] }}</h1>
+    <div>
+        <table border="3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Book ID</th>
+                    <th>Review</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                <tr>
+                    <td>{{ review[0] }}</td>
+                    <td>{{ review[1] }}</td>
+                    <td>{{ review[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <form action="{{ url_for('delete_review', book_id=book_id, review_id=review_id) }}" method="POST">
+            <label for="review_id">Review ID:</label><br>
+            <input type="text" id="review_id" name="review_id" required><br><br>
+    
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+</body>
+</html>
