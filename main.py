@@ -15,7 +15,8 @@ def initialize_db():
             genre TEXT,
             description TEXT,
             is_read TEXT NOT NULL DEFAULT 'N',
-            current_book TEXT NOT NULL DEFAULT 'N'
+            current_book TEXT NOT NULL DEFAULT 'N',
+            rating TEXT
         )
     ''')
     
@@ -23,7 +24,9 @@ def initialize_db():
         CREATE TABLE IF NOT EXISTS reviews (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             book_id INTEGER,
+            user TEXT,
             review TEXT,
+            rating REAL,
             FOREIGN KEY (book_id) REFERENCES books(id)
         )
     ''')
@@ -31,7 +34,6 @@ def initialize_db():
     conn.close()
 
 initialize_db()
-
 @app.route('/books/', methods = ['GET']) 
 def get_books():
     conn = sqlite3.connect('books.db')
@@ -219,6 +221,8 @@ def get_reviews(book_id):
             review_response["id"] = review[0]
             review_response["book_id"] = review[1]
             review_response["review"] = review[2]
+            review_response["user"] = review[3]
+            review_response["rating"] = review[4]
             final_json_response.append(review_response)
         
         return jsonify({"title": book_info[0], "author": book_info[1], "reviews": final_json_response})
@@ -251,28 +255,28 @@ def add_book():
 
     if is_read is None:
         if current_book is None:
-            book_query = f"INSERT INTO books (title, author, genre, description) VALUES (?, ?, ?, ?)"
+            book_query = f"INSERT INTO books (title, author, genre, description, rating) VALUES (?, ?, ?, ?, 'N/A')"
             cursor.execute(book_query, (title, author, genre, desc))
         else:
             if current_book.upper() in ('Y', 'N'):
                 # add logic for updating any current books to N if the value is Y
                 if current_book.upper() == 'Y':
                     cursor.execute(f"UPDATE books SET current_book = 'N' WHERE current_book = 'Y'") # Update the current book to not being read
-                book_query = f"INSERT INTO books (title, author, genre, description, current_book) VALUES (?, ?, ?, ?, ?)"
+                book_query = f"INSERT INTO books (title, author, genre, description, rating, current_book) VALUES (?, ?, ?, ?, 'N/A', ?)"
                 cursor.execute(book_query, (title, author, genre, desc, current_book))
             else:
                 return jsonify({"ValueError": "current_book is not 'Y' or 'N'"})
     else:
         if is_read.upper() in ('Y', 'N'):
             if current_book is None:
-                book_query = f"INSERT INTO books (title, author, genre, description, is_read) VALUES (?, ?, ?, ?, ?)"
+                book_query = f"INSERT INTO books (title, author, genre, description, rating, is_read) VALUES (?, ?, ?, ?, 'N/A', ?)"
                 cursor.execute(book_query, (title, author, genre, desc, is_read))
             else:
                 if current_book.upper() in ('Y', 'N'):
                     # add logic for updating any current books to N if the value is Y
                     if current_book.upper() == 'Y':
                         cursor.execute(f"UPDATE books SET current_book = 'N' WHERE current_book = 'Y'") # Update the current book to not being read
-                    book_query = f"INSERT INTO books (title, author, genre, description, is_read, current_book) VALUES (?, ?, ?, ?, ?, ?)"
+                    book_query = f"INSERT INTO books (title, author, genre, description, rating, is_read, current_book) VALUES (?, ?, ?, ?, 'N/A', ?, ?)"
                     cursor.execute(book_query, (title, author, genre, desc, is_read, current_book))
                 else:
                     return jsonify({"ValueError": "current_book is not 'Y' or 'N'"})
@@ -286,7 +290,7 @@ def add_book():
     else:
         return f"{title} by {author} added to the Book Club"
     
-@app.route('/books/<int:book_id>/add_reviews')  # Route to render the form
+@app.route('/books/<int:book_id>/add_review')  # Route to render the form
 def review_form(book_id):
     conn = sqlite3.connect('books.db')
     cursor = conn.cursor()
@@ -298,22 +302,50 @@ def review_form(book_id):
 
     return render_template('addReviewUI.html', book_info=book_info, book_id=book_id)
 
-@app.route('/books/<int:book_id>/add_reviews', methods = ['POST']) 
+@app.route('/books/<int:book_id>/add_review', methods = ['POST']) 
 def add_review(book_id):
     conn = sqlite3.connect('books.db')
     cursor = conn.cursor()
+
     if request.is_json:
         json_form = request.get_json()
         review = json_form.get("review")
+        user = json_form.get("user")
+        rating = json_form.get("rating")
+        if rating.is_integer():
+            rating = int(rating)
+        else:
+            rating = "%.1f".format(float(rating))
+
     else:
         review = request.form["review"]
+        user = request.form["user"]
+        rating = request.form["rating"]
+        if rating.is_integer():
+            rating = int(rating)
+        else:
+            rating = float(rating)
 
     book_query = "SELECT title, author FROM books WHERE id = ?"
     book_info = cursor.execute(book_query, (book_id,)).fetchone()
 
-    review_query = f"INSERT INTO reviews (book_id, review) VALUES (?, ?)"
-    cursor.execute(review_query, (book_id, review))
+    review_query = f"INSERT INTO reviews (book_id, review, user, rating) VALUES (?, ?, ?, ?)"
+    cursor.execute(review_query, (book_id, review, user, rating))
 
+    # Get the reviews for this book so you can get an average for the ratings and update it in the book table
+    ratings_query = "SELECT rating FROM reviews WHERE book_id = ?"
+    ratings = cursor.execute(ratings_query, (book_id,)).fetchall()
+    ratings = [rating[0] for rating in ratings]
+
+    overall_ratings = sum(ratings)/len(ratings)
+    if overall_ratings.is_integer():
+        overall_ratings = int(overall_ratings)
+    else:
+        overall_ratings = "%.1f" % overall_ratings
+
+    overall_ratings_query = "UPDATE books SET rating = ? WHERE id = ?"
+    cursor.execute(overall_ratings_query, (overall_ratings, book_id)).fetchone()
+    
     conn.commit()
     conn.close()
 
@@ -358,7 +390,6 @@ def update_review(book_id, review_id):
     else:
         return f"Review {review_id} updated for {book_info[0]} by {book_info[1]}"
 
-
 @app.route('/books/<int:book_id>/status', methods = ['GET', 'PUT']) 
 def update_read_status(book_id):
     conn = sqlite3.connect('books.db')
@@ -385,7 +416,6 @@ def update_read_status(book_id):
     else:
         return return_msg
 
-
 @app.route('/books/<int:book_id>/current', methods = ['GET', 'PUT']) 
 def update_current_book(book_id):
     conn = sqlite3.connect('books.db')
@@ -409,6 +439,7 @@ def update_current_book(book_id):
     else:
         return f"{book_info[0]} by {book_info[1]} updated to the club's current book"
 
+'''Deleting the Review is malfunctioning'''
 @app.route('/books/<int:book_id>/reviews/<int:review_id>', methods = ['GET', 'DELETE']) 
 def delete_review(book_id, review_id):
     conn = sqlite3.connect('books.db')
@@ -426,8 +457,8 @@ def delete_review(book_id, review_id):
     book_query = "SELECT title, author FROM books WHERE id = ?"
     book_info = cursor.execute(book_query, (book_id,)).fetchone()
 
-    delete_query = "DELETE FROM books WHERE id = ?"
-    cursor.execute(delete_query, (book_id, ))
+    delete_query = "DELETE FROM reviews WHERE id = ?"
+    cursor.execute(delete_query, (review_id, ))
 
     conn.commit()
     conn.close()
@@ -436,6 +467,7 @@ def delete_review(book_id, review_id):
         return jsonify({"message": f"Deleted a review for {book_info[0]} by {book_info[1]}"})
     else:
         return f"Deleted a review for {book_info[0]} by {book_info[1]}"
+
 @app.route('/books/<int:book_id>', methods = ['GET', 'DELETE'])
 def delete_one_book(book_id):
     conn = sqlite3.connect('books.db')
