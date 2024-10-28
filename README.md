@@ -42,12 +42,12 @@ The following routes for this API are:
 To add a book in postman, use this json in the body
 ```json
 {
-    "title": <book_title>,
-    "author": <book_author>,
-    "genre": <book_genre>,
-    "description": <book_desc>
-    "read_status": <book_read_status>
-    "current_status": <is_current_book>
+    "title": "book_title_placeholder",
+    "author": "book_author_placeholder",
+    "genre": "book_genre_placeholder",
+    "description": "book_desc_placeholder",
+    "read_status": "book_read_status_placeholder",
+    "current_status": "is_current_book_placeholder"
 }
 ```
 Note: Only `title`, `author`, `genre` and `description` are required fields. `read_status` and `current_status` are optional fields and will default to N if not included in the json.
@@ -56,9 +56,9 @@ Note: Only `title`, `author`, `genre` and `description` are required fields. `re
 To add a review in postman, use this json in the body
 ```json
 {
-    "user": <user_name>,
-    "review": <book_review>,
-    "rating": <book_rating>
+    "user": "user_name_placeholder",
+    "review": "book_review_placeholder",
+    "rating": "book_rating_placeholder"
 }
 ```
 
