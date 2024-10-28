@@ -16,6 +16,7 @@
                     <th>Description</th>
                     <th>Is Read</th>
                     <th>Current Book</th>
+                    <th>Rating</th>
                     <th>Reviews</th>
                     <th>Submit Review</th>
                     <th>Delete Book</th>
@@ -24,14 +25,15 @@
             <tbody>
                 {% for book in books %}
                 <tr>
-                    <td>{{ book[0] }}</td>
-                    <td>{{ book[1] }}</td>
-                    <td>{{ book[2] }}</td>
-                    <td>{{ book[3] }}</td>
-                    <td>{{ book[4] }}</td>
-                    <td>{{ book[5] }}</td>
-                    <td>{{ book[6] }}</td>
-                    <td>
+                    <td class="text_center">{{ book[0] }}</td>
+                    <td class="text_center">{{ book[1] }}</td>
+                    <td class="text_center">{{ book[2] }}</td>
+                    <td class="text_center">{{ book[3] }}</td>
+                    <td class="desc_wrap">{{ book[4] }}</td>
+                    <td class="text_center">{{ book[5] }}</td>
+                    <td class="text_center">{{ book[6] }}</td>
+                    <td class="text_center">{{ book[7] }}</td>
+                    <td class="text_center">
                         {% if review_counts[book[0]] > 0 %}
                             <a href="{{ url_for('get_reviews', book_id=book[0]) }}">
                                 {{ review_counts[book[0]] }}
