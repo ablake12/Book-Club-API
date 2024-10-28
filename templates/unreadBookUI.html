@@ -18,6 +18,7 @@
                     <th>Update Read Status</th>
                     <th>Current Book</th>
                     <th>Update to Current Book</th>
+                    <th>Rating</th>
                     <th>Reviews</th>
                     <th>Submit Review</th>
                     <th>Delete Book</th>
@@ -47,6 +48,7 @@
                             Current Book
                         {% endif %}
                     </td>
+                    <td class="text_center">{{ book[7] }}</td>
                     <td class="text_center">
                         {% if review_counts[book[0]] > 0 %}
                             <a href="{{ url_for('get_reviews', book_id=book[0]) }}">
