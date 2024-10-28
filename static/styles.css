@@ -3,7 +3,7 @@
     color: black;
     border: rgb(91, 134, 255);
     border-radius: 5px;
-    width: 70.35%;
+    width: 100%;
     padding: 10px 25px;
     font-size: 14px;
     margin-top: 5px;
@@ -14,7 +14,7 @@
     color: black;
     border: rgb(163, 187, 255);
     border-radius: 5px;
-    width: 70.35%;
+    width: 100%;
     padding: 10px 25px;
     font-size: 14px;
     margin-top: 5px;
@@ -24,7 +24,7 @@
     color: black;
     border: rgb(163, 187, 255);
     border-radius: 5px;
-    width: 70.35%;
+    width: 100%;
     padding: 10px 25px;
     font-size: 14px;
     margin-top: 5px;
@@ -69,8 +69,7 @@
 .text_center {
     text-align: center;
 }
-/* .empty_current {
-    background-color: rgb(91, 134, 255);
-    width: 100%;
-    height: 100%;
-} */
+
+input[type='range']{
+    accent-color: blue;
+}
