@@ -28,13 +28,13 @@ The following routes for this API are:
 ```GET``` <port>/books/read - Fetches all the books that have been read by the book club
 ```GET``` <port>/books/unread - Fetches all the books that have not been read by the book club yet
 ```GET``` <port>/books/current - Fetches the current book that the book club is reading
-```GET``` <port>/books/reviews/<int:book_id> - Fetches the reviews for a given book
+```GET``` <port>/books/<int:book_id>/reviews- Fetches the reviews for a given book
 ```POST``` <port>/add_book - Adds a book to the book club
 ```POST``` <port>/books/<int:book_id>/add_review - Adds review for a given book
 ```PUT``` <port>/books/<int:book_id>/reviews/<int:review_id> - Updates a review for a given book
 ```PUT``` <port>/books/<int:book_id>/status - Updates whether the book club has read a book or not
 ```PUT``` <port>/books/<int:book_id>/current - Updates the current book the book club is on
-```DELETE``` <port>/books/<int:book_id>/reviews/<int:review_id> - Delete a review for a given book
+```DELETE``` <port>/books/<int:book_id>/reviews/<int:review_id>/delete - Delete a review for a given book
 ```DELETE``` <port>/books/<int:book_id> - Deletes a book from the book club
 ```DELETE``` <port>/books/delete_all - Deletes all the books in the book club
 
