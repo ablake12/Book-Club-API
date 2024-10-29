@@ -26,7 +26,7 @@ def initialize_db():
             book_id INTEGER,
             user TEXT,
             review TEXT,
-            rating REAL,
+            rating TEXT,
             FOREIGN KEY (book_id) REFERENCES books(id)
         )
     ''')
@@ -204,7 +204,7 @@ def get_current_book():
         conn.close()
         return render_template('currentBookUI.html', books=books, review_counts=review_counts)
 
-@app.route('/books/reviews/<int:book_id>')
+@app.route('/books/<int:book_id>/reviews')
 def get_reviews(book_id):
     conn = sqlite3.connect('books.db')
     cursor = conn.cursor()
@@ -312,19 +312,19 @@ def add_review(book_id):
         review = json_form.get("review")
         user = json_form.get("user")
         rating = json_form.get("rating")
+        rating = float(rating)
         if rating.is_integer():
             rating = int(rating)
         else:
-            rating = "%.1f".format(float(rating))
+            rating = "%.1f".format(rating)
 
     else:
         review = request.form["review"]
         user = request.form["user"]
         rating = request.form["rating"]
+        rating = float(rating)
         if rating.is_integer():
             rating = int(rating)
-        else:
-            rating = float(rating)
 
     book_query = "SELECT title, author FROM books WHERE id = ?"
     book_info = cursor.execute(book_query, (book_id,)).fetchone()
@@ -362,9 +362,20 @@ def update_review_form(book_id, review_id):
     book_query = "SELECT title, author FROM books WHERE id = ?"
     book_info = cursor.execute(book_query, (book_id,)).fetchone()
 
+    # Get rating so it can be set to the default on the rating slider
+    rating_query = "SELECT rating FROM reviews where id = ?"
+    rating = cursor.execute(rating_query, (review_id,)).fetchone()
+    rating = rating[0]
+
+    if rating.is_integer():
+        rating = int(rating)
+    else:
+        rating = "%.1f" % rating
+
+
     conn.close()
 
-    return render_template('updateReviewUI.html', book_info=book_info, book_id=book_id, review_id=review_id)
+    return render_template('updateReviewUI.html', book_info=book_info, book_id=book_id, review_id=review_id, rating = rating)
 
 @app.route('/books/<int:book_id>/reviews/<int:review_id>', methods = ['POST', 'PUT']) 
 def update_review(book_id, review_id):
@@ -373,14 +384,38 @@ def update_review(book_id, review_id):
     if request.is_json:
         json_form = request.get_json()
         review = json_form.get("review")
+        rating = json_form.get("rating")
+        rating = float(rating)
+        if rating.is_integer():
+            rating = int(rating)
+        else:
+            rating = "%.1f".format(rating)
     else:
         review = request.form["review"]
+        rating = request.form["rating"]
+        rating = float(rating)
+        if rating.is_integer():
+            rating = int(rating)
     
     book_query = "SELECT title, author FROM books WHERE id = ?"
     book_info = cursor.execute(book_query, (book_id,)).fetchone()
 
-    review_query = f"UPDATE reviews SET review = ? WHERE id = ?"
-    cursor.execute(review_query, (review, review_id))
+    review_query = f"UPDATE reviews SET review = ?, rating = ? WHERE id = ?"
+    cursor.execute(review_query, (review, rating, review_id))
+
+    # Update overall ratings once review is updated
+    ratings_query = "SELECT rating FROM reviews WHERE book_id = ?"
+    ratings = cursor.execute(ratings_query, (book_id,)).fetchall()
+    ratings = [rating[0] for rating in ratings]
+
+    overall_ratings = sum(ratings)/len(ratings)
+    if overall_ratings.is_integer():
+        overall_ratings = int(overall_ratings)
+    else:
+        overall_ratings = "%.1f" % overall_ratings
+
+    overall_ratings_query = "UPDATE books SET rating = ? WHERE id = ?"
+    cursor.execute(overall_ratings_query, (overall_ratings, book_id))
 
     conn.commit()
     conn.close()
@@ -439,8 +474,7 @@ def update_current_book(book_id):
     else:
         return f"{book_info[0]} by {book_info[1]} updated to the club's current book"
 
-'''Deleting the Review is malfunctioning'''
-@app.route('/books/<int:book_id>/reviews/<int:review_id>', methods = ['GET', 'DELETE']) 
+@app.route('/books/<int:book_id>/reviews/<int:review_id>/delete', methods = ['GET', 'DELETE']) 
 def delete_review(book_id, review_id):
     conn = sqlite3.connect('books.db')
     cursor = conn.cursor()
@@ -459,6 +493,20 @@ def delete_review(book_id, review_id):
 
     delete_query = "DELETE FROM reviews WHERE id = ?"
     cursor.execute(delete_query, (review_id, ))
+
+    # Update overall ratings once review is deleted
+    ratings_query = "SELECT rating FROM reviews WHERE book_id = ?"
+    ratings = cursor.execute(ratings_query, (book_id,)).fetchall()
+    ratings = [rating[0] for rating in ratings]
+
+    overall_ratings = sum(ratings)/len(ratings)
+    if overall_ratings.is_integer():
+        overall_ratings = int(overall_ratings)
+    else:
+        overall_ratings = "%.1f" % overall_ratings
+
+    overall_ratings_query = "UPDATE books SET rating = ? WHERE id = ?"
+    cursor.execute(overall_ratings_query, (overall_ratings, book_id))
 
     conn.commit()
     conn.close()
