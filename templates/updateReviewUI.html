@@ -9,7 +9,8 @@
         <form action="{{ url_for('update_review', book_id=book_id, review_id=review_id) }}" method="POST">
             
             <label for="review">Review:</label><br>
-            <input type="text" id="review" name="review" required><br><br>
+            <!-- <input type="text" id="review" name="review" required><br><br> -->
+            <textarea id="review" name="review" style="resize: both; width: 10.4%; height: 15px;" required></textarea><br><br>
 
             <label for="rating">Rating:</label><br>
             <output id="rating_val" for="rating">{{ rating }}</output>
