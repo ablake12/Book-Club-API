@@ -1,5 +1,5 @@
 # Book-Club-API
-Hello. This is an API that manages a virtual Book Club using MySQL for storing and managing the the data. Users can interact with this API through a User Interface or through postman.
+Hello. This is an REST API that manages a virtual Book Club using MySQL for storing and managing the the data. Users can interact with this API through a User Interface or through postman.
 This API has the functionality to:
 - Add and delete books
 - Add, update, and delete reviews to the books
