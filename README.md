@@ -29,17 +29,17 @@ The following routes for this API are:
 ```GET``` <port>/books/unread - Fetches all the books that have not been read by the book club yet
 ```GET``` <port>/books/current - Fetches the current book that the book club is reading
 ```GET``` <port>/books/<int:book_id>/reviews- Fetches the reviews for a given book
-```POST``` <port>/add_book - Adds a book to the book club
+```POST``` <port>/books/add_book - Adds a book to the book club
 ```POST``` <port>/books/<int:book_id>/add_review - Adds review for a given book
-```PUT``` <port>/books/<int:book_id>/reviews/<int:review_id> - Updates a review for a given book
 ```PUT``` <port>/books/<int:book_id>/status - Updates whether the book club has read a book or not
 ```PUT``` <port>/books/<int:book_id>/current - Updates the current book the book club is on
-```DELETE``` <port>/books/<int:book_id>/reviews/<int:review_id>/delete - Delete a review for a given book
+```PUT``` <port>/books/<int:book_id>/reviews/<int:review_id> - Updates a review for a given book
 ```DELETE``` <port>/books/<int:book_id> - Deletes a book from the book club
+```DELETE``` <port>/books/<int:book_id>/reviews/<int:review_id>/delete - Delete a review for a given book
 ```DELETE``` <port>/books/delete_all - Deletes all the books in the book club
 
-### Adding a book in postman:
-To add a book in postman, use this json in the body
+### Adding a book in Postman:
+To add a book in Postman, use this json in the body
 ```json
 {
     "title": "book_title_placeholder",
@@ -52,7 +52,7 @@ To add a book in postman, use this json in the body
 ```
 Note: Only `title`, `author`, `genre` and `description` are required fields. `read_status` and `current_status` are optional fields and will default to N if not included in the json.
 
-### Adding a review in postman:
+### Adding a review in Postman:
 To add a review in postman, use this json in the body
 ```json
 {
@@ -61,6 +61,16 @@ To add a review in postman, use this json in the body
     "rating": "book_rating_placeholder"
 }
 ```
+
+# Updating a review in Postman, 
+To update a review in Postman, use this json in the body
+```json
+{
+    "review": "book_review_placeholder",
+    "rating": "book_rating_placeholder"
+}
+```
+
 
 
 
