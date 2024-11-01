@@ -97,7 +97,7 @@ def get_books():
 
     
 
-@app.route('/books/read', methods = ['GET']) 
+@app.route('/books/read/', methods = ['GET']) 
 def get_read_books():
     try:
         conn = sqlite3.connect('books.db')
@@ -152,7 +152,7 @@ def get_read_books():
                 return "<h1>500 Error: An internal error occurred</h1>"
         except Exception:
             print(f"Error: {error}")
-@app.route('/books/unread', methods = ['GET']) 
+@app.route('/books/unread/', methods = ['GET']) 
 def get_unread_books():
     try:
         conn = sqlite3.connect('books.db')
@@ -207,7 +207,7 @@ def get_unread_books():
         except Exception:
             print(f"Error: {error}")
 
-@app.route('/books/current', methods = ['GET']) 
+@app.route('/books/current/', methods = ['GET']) 
 def get_current_book():
     try:
         conn = sqlite3.connect('books.db')
@@ -261,7 +261,7 @@ def get_current_book():
                 return "<h1>500 Error: An internal error occurred</h1>"
         except Exception:
             print(f"Error: {error}")
-@app.route('/books/<int:book_id>/reviews', methods = ['GET'])
+@app.route('/books/<int:book_id>/reviews/', methods = ['GET'])
 def get_reviews(book_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -305,7 +305,7 @@ def get_reviews(book_id):
         except Exception:
             print(f"Error: {error}")
 
-@app.route('/books/add_book')
+@app.route('/books/add_book/')
 def book_form():
     try:
         return render_template('addBookUI.html')
@@ -313,7 +313,7 @@ def book_form():
         print(f"Error rendering Add Book Page: {error}")
         return f"Error rendering Add Book Page: {error}"
 
-@app.route('/books/add_book', methods = ['POST']) 
+@app.route('/books/add_book/', methods = ['POST']) 
 def add_book():
     try:
         conn = sqlite3.connect('books.db')
@@ -410,7 +410,7 @@ def add_book():
         except Exception:
             print(f"Error: {error}")
     
-@app.route('/books/<int:book_id>/add_review')  # Route to render the form
+@app.route('/books/<int:book_id>/add_review/')  # Route to render the form
 def review_form(book_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -434,7 +434,7 @@ def review_form(book_id):
         print(f"Error: {error}")
         return "<h1>500 Error: An internal error occurred</h1>"
 
-@app.route('/books/<int:book_id>/add_review', methods = ['POST']) 
+@app.route('/books/<int:book_id>/add_review/', methods = ['POST']) 
 def add_review(book_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -522,7 +522,7 @@ def add_review(book_id):
                 return "<h1>500 Error: An internal error occurred</h1>"
         except Exception:
             print(f"Error: {error}")
-@app.route('/books/<int:book_id>/reviews/<int:review_id>')
+@app.route('/books/<int:book_id>/reviews/<int:review_id>/')
 def update_review_form(book_id, review_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -563,7 +563,7 @@ def update_review_form(book_id, review_id):
         print(f"Error rendering Update Review Page: {error}")
         return f"Error rendering Update Review Page: {error}"
     
-@app.route('/books/<int:book_id>/reviews/<int:review_id>', methods = ['POST', 'PUT']) 
+@app.route('/books/<int:book_id>/reviews/<int:review_id>/', methods = ['POST', 'PUT']) 
 def update_review(book_id, review_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -658,7 +658,7 @@ def update_review(book_id, review_id):
         except Exception:
             print(f"Error: {error}")
 
-@app.route('/books/<int:book_id>/status', methods = ['GET', 'PUT']) 
+@app.route('/books/<int:book_id>/status/', methods = ['GET', 'PUT']) 
 def update_read_status(book_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -705,7 +705,7 @@ def update_read_status(book_id):
         except Exception:
             print(f"Error: {error}")
 
-@app.route('/books/<int:book_id>/current', methods = ['GET', 'PUT']) 
+@app.route('/books/<int:book_id>/current/', methods = ['GET', 'PUT']) 
 def update_current_book(book_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -748,7 +748,7 @@ def update_current_book(book_id):
                 return "<h1>500 Error: An internal error occurred</h1>"
         except Exception:
             print(f"Error: {error}")
-@app.route('/books/<int:book_id>/reviews/<int:review_id>/delete', methods = ['GET', 'DELETE']) 
+@app.route('/books/<int:book_id>/reviews/<int:review_id>/delete/', methods = ['GET', 'DELETE']) 
 def delete_review(book_id, review_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -812,7 +812,7 @@ def delete_review(book_id, review_id):
         except Exception:
             print(f"Error: {error}")
 
-@app.route('/books/<int:book_id>', methods = ['GET', 'DELETE'])
+@app.route('/books/<int:book_id>/', methods = ['GET', 'DELETE'])
 def delete_one_book(book_id):
     try:
         conn = sqlite3.connect('books.db')
@@ -854,7 +854,7 @@ def delete_one_book(book_id):
                 return "<h1>500 Error: An internal error occurred</h1>"
         except Exception:
             print(f"Error: {error}")
-@app.route('/books/delete_all', methods = ['GET', 'DELETE']) 
+@app.route('/books/delete_all/', methods = ['GET', 'DELETE']) 
 def delete_all_books():
     try:
         conn = sqlite3.connect('books.db')
@@ -884,6 +884,6 @@ def delete_all_books():
 
 if __name__ == '__main__':
     if os.getenv("PORT") is None:
-        app.run(debug=True)
+        app.run(debug=os.getenv("DEBUG", False))
     else:
-        app.run(debug=True, port=int(os.getenv("PORT")))
+        app.run(debug=os.getenv("DEBUG", False), port=int(os.getenv("PORT")))
