@@ -5,35 +5,36 @@ import sqlite3
 app = Flask(__name__)
 
 def initialize_db():
-    conn = sqlite3.connect('books.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS books (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            author TEXT NOT NULL,
-            genre TEXT,
-            description TEXT,
-            is_read TEXT NOT NULL DEFAULT 'N',
-            current_book TEXT NOT NULL DEFAULT 'N',
-            rating TEXT
-        )
-    ''')
-    
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS reviews (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            book_id INTEGER,
-            user TEXT,
-            review TEXT,
-            rating TEXT,
-            FOREIGN KEY (book_id) REFERENCES books(id)
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-initialize_db()
+    try:
+        conn = sqlite3.connect('books.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS books (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                author TEXT NOT NULL,
+                genre TEXT,
+                description TEXT,
+                is_read TEXT NOT NULL DEFAULT 'N',
+                current_book TEXT NOT NULL DEFAULT 'N',
+                rating TEXT
+            )
+        ''')
+        
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS reviews (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                book_id INTEGER,
+                user TEXT,
+                review TEXT,
+                rating TEXT,
+                FOREIGN KEY (book_id) REFERENCES books(id)
+            )
+        ''')
+        conn.commit()
+        conn.close()
+    except Exception as error:
+        print(f"Error initializing books database: {error}")
 
 @app.route('/')
 def home_form():
@@ -883,7 +884,14 @@ def delete_all_books():
             print(f"Error: {error}")
 
 if __name__ == '__main__':
-    if os.getenv("PORT") is None:
-        app.run(debug=os.getenv("DEBUG", False))
-    else:
-        app.run(debug=os.getenv("DEBUG", False), port=int(os.getenv("PORT")))
+    try:
+        if os.getenv("PORT") is None:
+            app.run(debug=False)
+        else:
+            app.run(debug=False, port=int(os.getenv("PORT")))
+    except ValueError:
+        print("Error: Invalid port. Please make sure to use the last 4 digits of your desired port.")
+    except OSError:
+        print("Error: Invalid port. Please close this port or provide a port currently not in use")
+
+    initialize_db()
