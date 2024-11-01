@@ -9,7 +9,7 @@
 <body>
     <h1>Add a New Book</h1>
     <div>
-    <form action="/add_book" method="POST">
+    <form action="/books/add_book" method="POST">
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title" required><br><br>
 
@@ -20,7 +20,7 @@
         <input type="text" id="genre" name="genre" required><br><br>
 
         <label for="description">Description:</label><br>
-        <input type="text" id="description" name="description" required><br><br>
+        <textarea id="desc" name="desc" style="resize: both; width: 10.4%; height: 15px;" required></textarea><br><br>
 
         <label for="read_status">Has this book been read? :</label><br>
         <input type="radio" id="read_yes" name="read_status" value="Y">
