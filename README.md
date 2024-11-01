@@ -45,7 +45,7 @@ Your options to use the API are:
 - Through Postman
 
 ## Postman Instructions
-To interfact with this API through Postman, add the following 2 key,value pair entries under headers:
+To interfact with this API through Postman, add the following 2 key,value pair entries under the Headers tab:
 |    Key   |  Value  |
 | -------- | ------- |
 | Accept  | application/json    |
