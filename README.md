@@ -40,8 +40,8 @@ The following routes for this API are:
 
 ## API Interfaces
 Your options to use the API are:
-- Through the interface on the home page at route <port>`/`
-- Through the Book Club List Page at route <port>/books/
+- Through the interface on the home page at route `<port>/`
+- Through the Book Club List Page at route `<port>/books/`
 - Through Postman
 
 ## Postman Instructions
