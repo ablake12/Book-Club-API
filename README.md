@@ -38,6 +38,19 @@ The following routes for this API are:
 - ```DELETE``` <port>/books/`<book_id>`/reviews/`<review_id>`/delete - Delete a review for a given book
 - ```DELETE``` <port>/books/delete_all - Deletes all the books in the book club
 
+## API Interfaces
+Your options to use the API are:
+- Through the interface on the home page at route <port>`/`
+- Through the Book Club List Page at route <port>/books/
+- Through Postman
+
+## Postman Instructions
+To interfact with this API through Postman, add the following two key, value entries under headers:
+|    Key   |  Value  |
+| -------- | ------- |
+| Accept  | application/json    |
+| Content-Type | application/json     |
+
 ### Adding a book in Postman:
 To add a book in Postman, use the following json in the body
 ```json
