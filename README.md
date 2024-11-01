@@ -1,5 +1,5 @@
 # Book-Club-API
-Hello. This is an API that manages a virtual Book Club. Users can interact with this API through a User Interface or through postman.
+Hello. This is an API that manages a virtual Book Club using MySQL for storing and managing the the data. Users can interact with this API through a User Interface or through postman.
 This API has the functionality to:
 - Add and delete books
 - Add, update, and delete reviews to the books
@@ -39,7 +39,7 @@ The following routes for this API are:
 - ```DELETE``` <port>/books/delete_all - Deletes all the books in the book club
 
 ### Adding a book in Postman:
-To add a book in Postman, use this json in the body
+To add a book in Postman, use the following json in the body
 ```json
 {
     "title": "book_title_placeholder",
@@ -53,7 +53,7 @@ To add a book in Postman, use this json in the body
 Note: Only `title`, `author`, `genre` and `description` are required fields. `read_status` and `current_status` are optional fields and will default to N if not included in the json.
 
 ### Adding a review in Postman:
-To add a review in postman, use this json in the body
+To add a review in postman, use the following json in the body:
 ```json
 {
     "user": "user_name_placeholder",
@@ -62,8 +62,8 @@ To add a review in postman, use this json in the body
 }
 ```
 
-# Updating a review in Postman, 
-To update a review in Postman, use this json in the body
+### Updating a review in Postman:
+To update a review in Postman, use the following json in the body:
 ```json
 {
     "review": "book_review_placeholder",
