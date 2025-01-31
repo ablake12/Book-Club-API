@@ -760,7 +760,6 @@ def delete_review(book_id, review_id):
 
         book_query = "SELECT title, author FROM books WHERE id = ?"
         book_info = cursor.execute(book_query, (book_id,)).fetchone()
-
         if book_info is None:
             if request.headers.get('Accept') == 'application/json':
                 conn.close()
@@ -781,11 +780,11 @@ def delete_review(book_id, review_id):
 
         delete_query = "DELETE FROM reviews WHERE id = ?"
         cursor.execute(delete_query, (review_id, ))
-
+    
         # Update overall ratings once review is deleted
         ratings_query = "SELECT rating FROM reviews WHERE book_id = ?"
         ratings = cursor.execute(ratings_query, (book_id,)).fetchall()
-        ratings = [rating[0] for rating in ratings]
+        ratings = [float(rating[0]) for rating in ratings]
 
         overall_ratings = sum(ratings)/len(ratings)
         if overall_ratings.is_integer():
@@ -809,6 +808,7 @@ def delete_review(book_id, review_id):
             if request.headers.get('Accept') == 'application/json':
                 return jsonify({"Error": "An internal error occurred"}), 500
             else:
+                print(error)
                 return "<h1>500 Error: An internal error occurred</h1>"
         except Exception:
             print(f"Error: {error}")
