@@ -44,6 +44,9 @@ Your options to use the API are:
 - Through the Book Club List Page at route `<port>/books/`
 - Through Postman
 
+## Demo
+[Demo](https://youtu.be/xscMD6RMoXw)
+
 ## Postman Instructions
 To interact with this API through Postman, add the following 2 key,value pair entries under the Headers tab:
 |    Key   |  Value  |
