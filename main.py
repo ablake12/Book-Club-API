@@ -344,7 +344,7 @@ def add_book():
             title = request.form.get("title")
             author = request.form.get("author")
             genre = request.form.get("genre")
-            desc = request.form.get("description")
+            desc = request.form.get("desc")
             is_read = request.form.get("read_status")
             current_book = request.form.get("current_status")
 
